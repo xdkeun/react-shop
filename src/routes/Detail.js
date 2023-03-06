@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 import styled from "styled-components";
 
 // styled-components
@@ -23,6 +24,7 @@ function Detail(props) {
   });
   let [alert, setAlert] = useState(true);
   let [input, setInput] = useState(0);
+  let [탭, 탭변경] = useState(0);
   useEffect(() => {
     // Detail이 MouseEvent, update시 코드가 실행 됨, 2번 실행되는 이유는 그냥 리액트 디버깅 방식임 index.js의 StrictMode 없애면 해결됨
     // useEffect는 html이 렌더링 된 후에 동작함. useEffect 안에 있는 코드가 오래 걸리면 html을 먼저 로드해서 사용자에게 보여주고, 그 다음에 useEffect를 실행해서 부드럽게 만들어줌, 그래서 보통 시간이 오래 걸리는 코드들을 useEffect에 작성하여 사용함
@@ -75,6 +77,64 @@ function Detail(props) {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+      <Nav variant="tabs" defaultActiveKey="link0">
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link0"
+            onClick={() => {
+              탭변경(0);
+            }}
+          >
+            버튼0
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link1"
+            onClick={() => {
+              탭변경(1);
+            }}
+          >
+            버튼1
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link2"
+            onClick={() => {
+              탭변경(2);
+            }}
+          >
+            버튼2
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <TabContent 탭={탭} />
+    </div>
+  );
+}
+function TabContent(props) {
+  // if문을 여러개 쓰기 위해 컴포넌트로 만들어서 컴포넌트를 넣어주는 방법도 가능
+  // if (props.탭 == 0) {
+  //   return <div>내용0</div>;
+  // } else if (props.탭 == 1) {
+  //   return <div>내용1</div>;
+  // } else if (props.탭 == 2) {
+  //   return <div>내용2</div>;
+  // }
+  let [fade, setFade] = useState("");
+  useEffect(() => {
+    setTimeout(() => {
+      setFade("end");
+    }, 100); //0.1초의 시간차를 줘야 return문이 가장 먼저 실행되고, 그 다음에 useEffect가 실행되서라고 함
+    return () => {
+      // useEffect 실행 전에 실행 됨, end라는 class를 없앴다가 다시 넣는 과정임. 없앴다가 넣어야 함
+      setFade("");
+    };
+  }, [props.탭]);
+  return (
+    <div className={`start ${fade}`}>
+      {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][props.탭]}
     </div>
   );
 }
