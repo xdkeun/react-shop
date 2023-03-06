@@ -4,9 +4,11 @@ import data from "./data.js";
 import { useState } from "react";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./routes/Detail.js";
+import axios from "axios";
 function App() {
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
+
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
@@ -55,6 +57,33 @@ function App() {
         </Route>
         <Route path="*" element={<div>없는 페이지</div>} />
       </Routes>
+      <button
+        onClick={() => {
+          //Promise.all이라는 거 사용하면 동시에 ajax 요청 여러개도 가능하다고 함
+          axios
+          // 로딩중UI를띄웠다가 로딩중UI를 숨기는거 만들기, 한번 클릭하면 data2.json 두번째클릭하면 data3.json, 네번째 클릭하면 더이상 상품이 없다고 알려주기
+          // 누른 횟수를 state로 저장하면 구현 가능할듯
+            .get("https://codingapple1.github.io/shop/data2.json")
+            .then((data) => {
+              //성공시에는 then
+              let copy = [...shoes, ...data.data];
+              // 원본데이터 shoes와 새로 받아온 데이터 data.data를 합침
+              // 서버와는 문자만 주고받을 수 있음 그래서 array, object도 ""를 붙혀 문자처럼 주고 받음 이걸 json이라고 함 이걸 axios가 자동으로 바꾸어주는 것, 만약 fetch를 쓰면 json 데이터를 가져오기 때문에 array,object로 변환하는 과정이 필요함
+              // fetch('url')
+              // .then(data => data.json())
+              // .then(data => {})
+              // fetch는 이런식으로 받아온 json 형식을 array, object로 바꿔야 함
+              setShoes(copy);
+            })
+            .catch(() => {
+              //실패시에는 catch
+              console.log("실패하였습니다");
+            });
+        }}
+        
+      >
+        더 보기
+      </button>
     </div>
   );
 }
@@ -78,7 +107,7 @@ function About() {
     <div>
       <h4>회사 정보</h4>
       {/* Outlet을 작성한 자리에 member element를 보여줌 */}
-      <Outlet/>
+      <Outlet />
     </div>
   );
 }
