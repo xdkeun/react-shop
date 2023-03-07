@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import styled from "styled-components";
-
+import {Context1} from './../App.js'
 // styled-components
 let Btn = styled.button`
   all: unset;
@@ -16,6 +16,8 @@ let Btn = styled.button`
 `;
 
 function Detail(props) {
+
+  // let {재고} = useContext(Context1)
   let [count, setCount] = useState(0);
 
   let { id } = useParams();
@@ -109,7 +111,7 @@ function Detail(props) {
           </Nav.Link>
         </Nav.Item>
       </Nav>
-      <TabContent 탭={탭} />
+      <TabContent 탭={탭} shoes={props.shoes} />
     </div>
   );
 }
@@ -134,7 +136,7 @@ function TabContent(props) {
   }, [props.탭]);
   return (
     <div className={`start ${fade}`}>
-      {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][props.탭]}
+      {[<div>{props.shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div>][props.탭]}
     </div>
   );
 }
