@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./routes/Detail.js";
 import axios from "axios";
+import Cart from "./routes/Cart.js";
+
 // export let Context1 = createContext()
 function App() {
   let [shoes, setShoes] = useState(data);
@@ -89,6 +91,8 @@ function App() {
             element={<div>/about/member로 접속하셨습니다</div>}
           />
         </Route>
+        <Route path="/cart" element={<Cart/>} />
+
         <Route path="*" element={<div>없는 페이지</div>} />
       </Routes>
     </div>
