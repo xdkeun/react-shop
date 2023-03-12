@@ -29,6 +29,7 @@ function Detail(props) {
   let [input, setInput] = useState(0);
   let [탭, 탭변경] = useState(0);
   let dispatch = useDispatch();
+
   useEffect(() => {
     // Detail이 MouseEvent, update시 코드가 실행 됨, 2번 실행되는 이유는 그냥 리액트 디버깅 방식임 index.js의 StrictMode 없애면 해결됨
     // useEffect는 html이 렌더링 된 후에 동작함. useEffect 안에 있는 코드가 오래 걸리면 html을 먼저 로드해서 사용자에게 보여주고, 그 다음에 useEffect를 실행해서 부드럽게 만들어줌, 그래서 보통 시간이 오래 걸리는 코드들을 useEffect에 작성하여 사용함
@@ -43,6 +44,17 @@ function Detail(props) {
       console.log("숫자를 입력하세요");
     }
   }, [input]);
+
+  useEffect(()=>{
+    // localStorage.setItem('watched', [detailProduct.id]);
+    let 꺼낸거 = localStorage.getItem('watched')
+    꺼낸거 = JSON.parse(꺼낸거)
+    꺼낸거.push(detailProduct.title);
+    꺼낸거 = new Set(꺼낸거) // array가 Set 자료형이 되고 모든 중복이 제거 됨
+    꺼낸거 = Array.from(꺼낸거) // 다시 array로 변환
+    localStorage.setItem('watched', JSON.stringify(꺼낸거));
+  }, [])
+  
 
   return (
     <div className="container">

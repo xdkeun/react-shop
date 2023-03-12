@@ -1,18 +1,35 @@
 import "./App.css";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import data from "./data.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./routes/Detail.js";
 import axios from "axios";
 import Cart from "./routes/Cart.js";
+import { useQuery } from "@tanstack/react-query";
 
 // export let Context1 = createContext()
 function App() {
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
   let [더보기횟수, 더보기횟수변경] = useState(2);
+  useEffect(() => {
+    if (!localStorage.getItem("watched")) {
+      localStorage.setItem("watched", JSON.stringify([]));
+    }
+  }, []);
 
+  let result = useQuery(["작명"], () => {
+    return axios
+      .get("https://codingapple1.github.io/userdata.json")
+      .then((a) => {
+        return a.data;
+      });
+  });
+  // useQuery 유용한 변수들
+  // result.data 실제 데이터가 있을 때 true가 됨
+  // result.error 에러가 발생했을 때 true가 됨
+  // result.isLoading 로딩 중일때 true가 됨
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
@@ -22,7 +39,8 @@ function App() {
               navigate("/");
             }}
           >
-            shop
+            {/* loading 중이면 그냥 shop을 띄우고, 아니면 name(Mark)shop을 띄움 */}
+            {result.isLoading ? "shop" : result.data.name + "shop"}
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link
@@ -42,6 +60,7 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
+      <div>{localStorage.getItem("watched")}</div>
       <Routes>
         <Route
           path="/"
@@ -86,11 +105,14 @@ function App() {
             </>
           }
         />
-        <Route path="/detail/:id" element={
-          // <Context1.Provider value={{}}>
-        <Detail shoes={shoes} />
-        // </Context1.Provider>
-        } />
+        <Route
+          path="/detail/:id"
+          element={
+            // <Context1.Provider value={{}}>
+            <Detail shoes={shoes} />
+            // </Context1.Provider>
+          }
+        />
         <Route path="/about" element={<About />}>
           <Route
             path="member"
@@ -98,7 +120,7 @@ function App() {
             element={<div>/about/member로 접속하셨습니다</div>}
           />
         </Route>
-        <Route path="/cart" element={<Cart/>} />
+        <Route path="/cart" element={<Cart />} />
 
         <Route path="*" element={<div>없는 페이지</div>} />
       </Routes>

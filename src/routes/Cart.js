@@ -12,7 +12,7 @@ function Cart() {
   console.log(state);
   return (
     <div>
-      {state.user.name}
+      {/* {state.user.name} */}
       <Table>
         <thead>
           <tr>
