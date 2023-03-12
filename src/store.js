@@ -14,12 +14,18 @@ let cart = createSlice({
     { id: 2, name: "Grey Yordan", count: 1 },
   ],
   reducers: {
-    countPlus(state, a) {
-      return (state.count += a.payload);
+    addCount(state, action) {
+      // state[action.payload].count++;
+      let 번호 = state.findIndex((a)=>
+        a.id === action.payload)
+        state[번호].count++;
+      },
+      addItem(state, action){
+        state.push(action.payload)
+      }
     },
-  },
 });
-export let { countPlus } = cart.actions;
+export let { addCount, addItem } = cart.actions;
 
 export default configureStore({
   reducer: {

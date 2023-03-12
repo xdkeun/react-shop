@@ -2,7 +2,9 @@ import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import styled from "styled-components";
-import {Context1} from './../App.js'
+import { Context1 } from "./../App.js";
+import { useDispatch } from "react-redux";
+import { addItem } from "./../store";
 // styled-components
 let Btn = styled.button`
   all: unset;
@@ -16,7 +18,6 @@ let Btn = styled.button`
 `;
 
 function Detail(props) {
-
   // let {재고} = useContext(Context1)
   let [count, setCount] = useState(0);
 
@@ -27,6 +28,7 @@ function Detail(props) {
   let [alert, setAlert] = useState(true);
   let [input, setInput] = useState(0);
   let [탭, 탭변경] = useState(0);
+  let dispatch = useDispatch();
   useEffect(() => {
     // Detail이 MouseEvent, update시 코드가 실행 됨, 2번 실행되는 이유는 그냥 리액트 디버깅 방식임 index.js의 StrictMode 없애면 해결됨
     // useEffect는 html이 렌더링 된 후에 동작함. useEffect 안에 있는 코드가 오래 걸리면 html을 먼저 로드해서 사용자에게 보여주고, 그 다음에 useEffect를 실행해서 부드럽게 만들어줌, 그래서 보통 시간이 오래 걸리는 코드들을 useEffect에 작성하여 사용함
@@ -76,7 +78,14 @@ function Detail(props) {
               }}
             />
           </p>
-          <button className="btn btn-danger">주문하기</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              dispatch(addItem({ id: 1, name: detailProduct.title, count: 1 }));
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
       <Nav variant="tabs" defaultActiveKey="link0">
@@ -136,7 +145,11 @@ function TabContent(props) {
   }, [props.탭]);
   return (
     <div className={`start ${fade}`}>
-      {[<div>{props.shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div>][props.탭]}
+      {
+        [<div>{props.shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div>][
+          props.탭
+        ]
+      }
     </div>
   );
 }
