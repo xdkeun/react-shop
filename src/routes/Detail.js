@@ -45,16 +45,15 @@ function Detail(props) {
     }
   }, [input]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // localStorage.setItem('watched', [detailProduct.id]);
-    let 꺼낸거 = localStorage.getItem('watched')
-    꺼낸거 = JSON.parse(꺼낸거)
+    let 꺼낸거 = localStorage.getItem("watched");
+    꺼낸거 = JSON.parse(꺼낸거);
     꺼낸거.push(detailProduct.title);
-    꺼낸거 = new Set(꺼낸거) // array가 Set 자료형이 되고 모든 중복이 제거 됨
-    꺼낸거 = Array.from(꺼낸거) // 다시 array로 변환
-    localStorage.setItem('watched', JSON.stringify(꺼낸거));
-  }, [])
-  
+    꺼낸거 = new Set(꺼낸거); // array가 Set 자료형이 되고 모든 중복이 제거 됨
+    꺼낸거 = Array.from(꺼낸거); // 다시 array로 변환
+    localStorage.setItem("watched", JSON.stringify(꺼낸거));
+  }, []);
 
   return (
     <div className="container">
@@ -72,7 +71,9 @@ function Detail(props) {
       <div className="row">
         <div className="col-md-6">
           <img
-            src={`https://codingapple1.github.io/shop/shoes1.jpg`}
+            src={`https://codingapple1.github.io/shop/shoes${
+              detailProduct.id + 1
+            }.jpg`}
             width="100%"
           />
         </div>
@@ -96,7 +97,7 @@ function Detail(props) {
               dispatch(addItem({ id: 1, name: detailProduct.title, count: 1 }));
             }}
           >
-            주문하기
+            장바구니에 담기
           </button>
         </div>
       </div>

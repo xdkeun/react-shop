@@ -45,36 +45,38 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link
               onClick={() => {
-                navigate("/detail/1");
-              }}
-            >
-              DETAIL
-            </Nav.Link>
-            <Nav.Link
-              onClick={() => {
                 navigate("/cart");
               }}
             >
-              CART
+              장바구니
             </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
-      <div>{localStorage.getItem("watched")}</div>
       <Routes>
         <Route
           path="/"
           element={
             <>
               <div className="main-bg"></div>
+              <div>최근 본 상품</div>
+              <div>{localStorage.getItem("watched")}</div>
               <div className="container">
                 <div className="row">
                   {shoes.map((a, i) => {
-                    return <Product shoes={shoes[i]} i={i + 1} />;
+                    return (
+                      <Nav.Link
+                        onClick={() => {
+                          navigate(`/detail/${i}`);
+                        }}
+                      >
+                        <Product shoes={shoes[i]} i={i + 1} />
+                      </Nav.Link>
+                    );
                   })}
                 </div>
               </div>
-              <button
+              <button className="more-btn"
                 onClick={() => {
                   더보기횟수변경(더보기횟수 + 1);
                   //Promise.all이라는 거 사용하면 동시에 ajax 요청 여러개도 가능하다고 함
@@ -137,7 +139,7 @@ function Product(props) {
         width="80%"
       />
       <h4>{props.shoes.title}</h4>
-      <p>{props.shoes.content}</p>
+      <p class="product-content">{props.shoes.content}</p>
     </div>
   );
 }

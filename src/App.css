@@ -19,3 +19,21 @@
   opacity: 1;
   transition: opacity .5s;
 }
+
+.col-md-4 {
+  display: inline;
+}
+
+.product-content {
+  border-bottom: 1px solid black;
+}
+
+.more-btn {
+  all: unset;
+  background-color: orange;
+  color: white;
+  padding: 5px 10px;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 50px;
+}
