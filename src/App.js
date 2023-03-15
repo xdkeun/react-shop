@@ -1,12 +1,16 @@
 import "./App.css";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import data from "./data.js";
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
-import Detail from "./routes/Detail.js";
 import axios from "axios";
-import Cart from "./routes/Cart.js";
 import { useQuery } from "@tanstack/react-query";
+
+// 로딩 시간 단축을 위한 lazy, Suspense 사용
+// react는 single page application으로 npm run build를 하면 js 모든 코드를 한 파일에 모으게 되는데 이렇게 되면 로딩 시간이 오래걸림.
+// 이걸 방지하기 위해 main 페이지에서 필요없는 Detail, Cart는 필요할때 로딩해달라고 요청하는 lazy
+const Detail = lazy(() => import('./routes/Detail.js'))
+const Cart = lazy(() => import('./routes/Cart.js'))
 
 // export let Context1 = createContext()
 function App() {
@@ -53,6 +57,7 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
+      <Suspense fallback={<div>로딩 중</div>}>
       <Routes>
         <Route
           path="/"
@@ -126,6 +131,7 @@ function App() {
 
         <Route path="*" element={<div>없는 페이지</div>} />
       </Routes>
+      </Suspense>
     </div>
   );
 }
